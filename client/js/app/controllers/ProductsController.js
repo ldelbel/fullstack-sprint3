@@ -8,18 +8,22 @@ class ProductsController {
       'message'
     );
 
+    this._products = new Bind(
+      new ProductsList(),
+      new ProductsView($('#products')),
+      'add',
+      'clear'
+    );
+
     this.allProducts();
   }
 
-  allProducts() {
-    // TODO: implementar
+  async allProducts() {
+    const service = new ProductsService();
+    const products = await service.allProducts();
 
-    // let service = new ProductsServics();
-    // service
-    //   .allProducts()
-    //   .then()
-    //   .catch();
-
-    this._alert.message = 'ProductsController ainda não foi implementado.';
+    const data = products.map(product => new Product(product.image, product.description, product.value));
+    
+    this._products.add(data);
   }
 }

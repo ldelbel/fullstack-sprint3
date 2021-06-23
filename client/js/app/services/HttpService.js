@@ -1,41 +1,33 @@
 class HttpService {
-  get(url) {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-
-      xhr.open('GET', url);
-
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4) {
-          if (xhr.status == 200) {
-            resolve(JSON.parse(xhr.responseText));
-          } else {
-            reject(xhr.responseText);
-          }
-        }
-      };
-
-      xhr.send();
-    });
+  
+  async get(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.statusText);
+      
+      const json = await res.json();
+      
+      return json;
+    } catch (err) {
+      console.log(err.message);
+    }
   }
 
-  post(url, data) {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader('Content-type', 'application/json');
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4) {
-          if (xhr.status == 200) {
-            resolve(JSON.parse(xhr.responseText));
-          } else {
-            reject(xhr.responseText);
-          }
-        }
-      };
+  async post(url, data) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const json = await res.json();
 
-      // usando JSON.stringifly para converter objeto em uma string no formato JSON.
-      xhr.send(JSON.stringify(data));
-    });
+      return json;
+    } catch(err) {
+      console.log(err.message);
+    }
   }
 }

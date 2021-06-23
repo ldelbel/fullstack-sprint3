@@ -3,7 +3,8 @@ class ProductsService {
     this._http = new HttpService();
   }
 
-  allProducts() {
-    // TODO: implementar
+  async allProducts() {
+    const products = await this._http.get('/api/products');
+    return products;
   }
 }
